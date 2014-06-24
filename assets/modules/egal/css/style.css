@@ -1,0 +1,78 @@
+@charset "UTF-8";
+/*
+ * jQuery File Upload Plugin CSS Example 8.8.2
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+body {
+	background: url(../img/body.jpg);
+  /*padding-top: 60px;*/
+}
+
+#dropzone {
+    background: palegreen;
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-weight: bold;
+}
+#dropzone.in {
+    width: 600px;
+    height: 200px;
+    line-height: 200px;
+    font-size: larger;
+}
+#dropzone.hover {
+    background: lawngreen;
+}
+#dropzone.fade {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    opacity: 1;
+}
+.placeholder1 {
+    margin-left: 0 !important;
+    background: #000;
+    width: 200px;
+    height: 200px;
+}
+/*.thumbnail {*/
+    /*-webkit-transition: all 0s ease-out !important;*/
+    /*-moz-transition: all 0s ease-out !important;*/
+    /*-ms-transition: all 0s ease-out !important;*/
+    /*-o-transition: all 0s ease-out !important;*/
+    /*transition: all 0s ease-out !important;*/
+/*}*/
+
+/*
+#sortable1 {
+    list-style-type: none;
+}
+#sortable1, .files { list-style-type: none; margin: 0; padding: 0; width: 450px; }
+#sortable1 li  { margin: 3px 3px 3px 0; padding: 1px; float: left; width: 100px; height: 90px; text-align: center; }*/
+
+.no-transition {
+    -webkit-transition: height 0.001s;
+    -moz-transition: height 0.001s;
+    -ms-transition: height 0.001s;
+    -o-transition: height 0.001s;
+    transition: height 0.001s;
+}
+.list-group-item1 {padding: 2px !important;}
+
+.files .delete{position: absolute; bottom:0;right:0;opacity: 0.3}
+.files .info{position: absolute; top:0;right:0;opacity: 0.3}
+.files button:hover{opacity: .8}
+/*.files :hover{opacity: .8}*/
+.thumbnail {height: 100px;overflow: hidden}
+#settings input {width:7em}
