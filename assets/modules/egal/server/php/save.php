@@ -39,37 +39,28 @@ if (isset($_REQUEST['id'])) {
     echo $modx->db->update($fields, $table, "filename='" . $filename . "' AND content_id='" . $_SESSION['dir'] . "'");
 }
 
-////update settings
-if (isset($_REQUEST['content_id']) && !isset($_REQUEST['pId'])) {
+//update settings
+if (isset($_REQUEST['update'])) {
     update_settings();
 }
 
 
-if (isset($_POST['pId'])) {
-    @$sql = $modx->db->select('content_id, iwidth, iheight, iquality, twidth, theight, tquality', $table1, "content_id='" . $_POST['pId'] . "'");
-    $row = $modx->db->getRow($sql);
+if (isset($_REQUEST['select'])) {
+    @$sql = $modx->db->select('content_id, image_versions', $table1, "content_id='" . $_REQUEST['content_id'] . "'");
+    @$row = $modx->db->getRow($sql);
 
-    if (!$row) {
-        $_POST['content_id']=$_POST['pId'];
-        unset($_POST['pId']);
-        update_settings();
-        @$sql = $modx->db->select('content_id, iwidth, iheight, iquality, twidth, theight, tquality', $table1, "content_id='" . $_POST['content_id'] . "'");
-        $row = $modx->db->getRow($sql);
-        echo json_encode($row);
-    }
-    else
-        echo json_encode($row);
+    if ($row) echo ($row[image_versions]);
+    else echo (update_settings());
+
 }
 
 function update_settings() {
     global $modx, $table1;
-    $res = "( '" . implode("', '", $_POST) . "' )";
-    $tt = $modx->db->query("INSERT INTO $table1 (content_id, iwidth, iheight, iquality, twidth, theight, tquality) VALUES $res ON DUPLICATE KEY UPDATE
-    iheight = VALUES(iheight),
-    iwidth = VALUES(iwidth),
-    iquality = VALUES(iquality),
-    theight = VALUES(theight),
-    twidth = VALUES(twidth),
-    tquality = VALUES(tquality)");
-    return $tt;
+
+    //$res= array_shift($_POST);
+    $res= $_POST['content_id'];
+    $image_versions = json_encode($_POST);
+    //$res = "( '" . implode("', '", $_POST) . "' )";
+    $tt = $modx->db->query("INSERT INTO $table1 (content_id, image_versions) VALUES ($res,'$image_versions') ON DUPLICATE KEY UPDATE image_versions = VALUES(image_versions)");
+    return $image_versions;
 }

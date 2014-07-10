@@ -13,14 +13,14 @@ $modx->db->connect();
 //$cols = $modx->db->getRow( $result );
 //echo $modx->getLoginUserID();
 
-//@session_start();
-if (isset($_REQUEST['iwidth']))  $_SESSION['iW']=$_REQUEST['iwidth'];
-if (isset($_REQUEST['iheight']))  $_SESSION['iH']=$_REQUEST['iheight'];
-if (isset($_REQUEST['iquality']))  $_SESSION['iQ']=$_REQUEST['iquality'];
-
-if (isset($_REQUEST['twidth']))  $_SESSION['tW']=$_REQUEST['twidth'];
-if (isset($_REQUEST['theight']))  $_SESSION['tH']=$_REQUEST['theight'];
-if (isset($_REQUEST['tquality']))  $_SESSION['tQ']=$_REQUEST['tquality'];
+@session_start();
+//if (isset($_REQUEST['iwidth']))  $_SESSION['iW']=$_REQUEST['iwidth'];
+//if (isset($_REQUEST['iheight']))  $_SESSION['iH']=$_REQUEST['iheight'];
+//if (isset($_REQUEST['iquality']))  $_SESSION['iQ']=$_REQUEST['iquality'];
+//
+//if (isset($_REQUEST['twidth']))  $_SESSION['tW']=$_REQUEST['twidth'];
+//if (isset($_REQUEST['theight']))  $_SESSION['tH']=$_REQUEST['theight'];
+//if (isset($_REQUEST['tquality']))  $_SESSION['tQ']=$_REQUEST['tquality'];
 
 $options = array(
     //'gallery_dir' => isset($_REQUEST['pId'])?($_REQUEST['pId']):"1",
@@ -35,20 +35,22 @@ $options = array(
     'db_name' => $dbase,
     'db_table' => $table_prefix . 'portfolio_galleries',
     'image_versions' => array(
-        'original' => array(
-            'max_width' => 19200,
-            'max_height' => 12000,
-            //'jpeg_quality' => 100
-        ),
         '' => array(
-            'max_width' => isset ($_SESSION['iW']) ? $_SESSION['iW'] : 1920,
-            'max_height' => isset ($_SESSION['iH']) ? $_SESSION['iH'] : 1200,
-            'jpeg_quality' => isset ($_SESSION['iQ']) ? $_SESSION['iQ'] : 95
+            'max_width' => 1920,
+            'max_height' => 1200,
+            'jpeg_quality' => 100
+        ),
+        'images' => array(
+            'max_width' => $_REQUEST['iwidth'],
+            'max_height' => $_REQUEST['iheight'],
+            'jpeg_quality' => $_REQUEST['iquality'],
+            'crop' =>  $_REQUEST['icrop']
         ),
         'thumbs' => array(
-            'max_width' => isset ($_SESSION['tW']) ? $_SESSION['tW'] : 180,
-            'max_height' => isset ($_SESSION['tH']) ? $_SESSION['tH'] : 180,
-            'jpeg_quality' => isset ($_SESSION['tQ']) ? $_SESSION['tQ'] : 95
+            'max_width' => $_REQUEST['twidth'],
+            'max_height' => $_REQUEST['theight'],
+            'jpeg_quality' => $_REQUEST['tquality'],
+            'crop' =>  $_REQUEST['tcrop']
         )
     )
 );
@@ -90,12 +92,10 @@ class CustomUploadHandler extends UploadHandler {
         $file = parent::handle_file_upload(
             $uploaded_file, $name, $size, $type, $error, $index, $content_range
         );
+
         if (empty($file->error)) {
-
-
             @$fields = array('content_id' => $_SESSION['dir'], 'filename' => $file->name, 'title' =>  $file->title, 'description' => $file->description, 'sortorder' => $file->sortorder);
             @$file->id = $modx->db->insert( $fields, $this->options['db_table']);
-
         }
         return $file;
     }
@@ -103,6 +103,7 @@ class CustomUploadHandler extends UploadHandler {
     protected function set_additional_file_properties($file) {
         global $modx;
         parent::set_additional_file_properties($file);
+
         if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
             @$sql=$modx->db->select('*', $this->options['db_table'],"filename='".$file->name."'","sortorder");
@@ -116,6 +117,30 @@ class CustomUploadHandler extends UploadHandler {
                 $file->keywords = $row['keywords'];
             }
         }
+    }
+
+    public function get($print_response = true) {
+        if ($print_response && isset($_GET['download'])) {
+            return $this->download();
+        }
+        $file_name = $this->get_file_name_param();
+        if ($file_name) {
+            $response = array(
+                $this->get_singular_param_name() => $this->get_file_object($file_name)
+            );
+        } else {
+            $response = array(
+                $this->options['param_name'] => $this->get_file_objects()
+            );
+        }
+
+        if (isset ($_REQUEST['regenerate'])){
+        foreach ($response['files'] as $index => $value) {
+            $this->handle_image_file('', $response['files'][$index]);
+        }
+        }
+
+        return $this->generate_response($response, $print_response);
     }
 
     public function delete($print_response = true) {
@@ -135,8 +160,8 @@ class CustomUploadHandler extends UploadHandler {
         if (!is_dir($upload_dir)) {
             return array();
         }
-
-        $cId=$_REQUEST['content_id'];
+        $cId=1;
+        if (isset($_REQUEST['content_id'])) $cId=$_REQUEST['content_id'];
         @$sql=$modx->db->select("filename", $this->options['db_table'],"content_id=$cId","sortorder");
 
         while ($row = $modx->db->getRow( $sql )) {
@@ -184,22 +209,44 @@ protected function niceFilename($filename) {
         $alias=strtr($filename, $changes);
         $alias = strtolower( $alias );
         $alias = preg_replace('/&.+?;/', '', $alias); // kill entities
-        $alias = str_replace( '_', '-', $alias );
+//        $alias = str_replace( '_', '-', $alias );
         $alias = str_replace( ' ', '_', $alias );
-        $alias = preg_replace('/[^a-z0-9\s-.]/', '', $alias);
+//        $alias = preg_replace('/[^a-z0-9\s-.]/', '', $alias);
         $alias = preg_replace('/\s+/', '-', $alias);
         $alias = preg_replace('|-+|', '-', $alias);
-        $alias = trim($alias, '-');
+//        $alias = trim($alias, '-');
         return $alias;
     }
-
-    protected function get_file_name($name, $type = null, $index = null, $content_range = null) {
-        return $this->get_unique_filename(
-            $this->trim_file_name( $this->niceFilename($name), $type, $index, $content_range),
-            $type,
-            $index,
-            $content_range);
+//    protected function get_file_name($file_path, $name, $size, $type, $error,
+//                                     $index, $content_range) {
+//        return $this->niceFilename($this->get_unique_filename(
+//            $file_path,
+//            $this->trim_file_name($file_path, $name, $size, $type, $error,
+//                $index, $content_range),
+//            $size,
+//            $type,
+//            $error,
+//            $index,
+//            $content_range
+//        ));
+//    }
+    protected function get_unique_filename($file_path, $name, $size, $type, $error,
+                                           $index, $content_range) {
+        while(is_dir($this->get_upload_path($name))) {
+            $name = $this->upcount_name($name);
+        }
+        // Keep an existing filename if this is part of a chunked upload:
+        $uploaded_bytes = $this->fix_integer_overflow(intval($content_range[1]));
+        while(is_file($this->get_upload_path($name))) {
+            if ($uploaded_bytes === $this->get_file_size(
+                    $this->get_upload_path($name))) {
+                break;
+            }
+            $name = $this->upcount_name($name);
+        }
+        return $this->niceFilename($name);
     }
+
 }
 
 
