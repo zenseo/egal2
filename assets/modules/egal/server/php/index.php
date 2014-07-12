@@ -35,11 +35,11 @@ $options = array(
     'db_name' => $dbase,
     'db_table' => $table_prefix . 'portfolio_galleries',
     'image_versions' => array(
-        '' => array(
-            'max_width' => 1920,
-            'max_height' => 1200,
-            'jpeg_quality' => 100
-        ),
+//        '' => array(
+//            'max_width' => 1920,
+//            'max_height' => 1200,
+//            'jpeg_quality' => 100
+//        ),
         'images' => array(
             'max_width' => $_REQUEST['iwidth'],
             'max_height' => $_REQUEST['iheight'],

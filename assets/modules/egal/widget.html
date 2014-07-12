@@ -50,6 +50,7 @@
 <body>
 
 <div class="container">
+    <div id="err"></div>
     <!--<select id="size">-->
         <!--<option value="10">10</option>-->
         <!--<option value="20">20</option>-->
@@ -75,11 +76,11 @@
 
 
             <div> Images
-                <label>Width <input class=" input-sm" name="iwidth" type="number" value="1920"></label>
-                <label>Height <input class=" input-sm" name="iheight" type="number" value="1200"></label>
-                <label>Quality <input class=" input-sm" name="iquality" type="number" value="95"></label>
+                <label>Width <input class="settings input-sm" name="iwidth" type="number" value="1920"></label>
+                <label>Height <input class="settings input-sm" name="iheight" type="number" value="1200"></label>
+                <label>Quality <input class="settings input-sm" name="iquality" type="number" value="95"></label>
                 <label>Crop
-                    <select name="icrop">
+                    <select class="settings" name="icrop">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
@@ -88,11 +89,11 @@
 
 
             <div> Thumbs
-                <label>Width <input class=" input-sm" name="twidth" type="number" value="192"></label>
-                <label>Height <input class=" input-sm" name="theight" type="number" value="120"></label>
-                <label>Quality <input class=" input-sm" name="tquality" type="number" value="95"></label>
+                <label>Width <input class="settings input-sm" name="twidth" type="number" value="192"></label>
+                <label>Height <input class="settings input-sm" name="theight" type="number" value="120"></label>
+                <label>Quality <input class="settings input-sm" name="tquality" type="number" value="95"></label>
                 <label>Crop
-                    <select name="tcrop">
+                    <select class="settings" name="tcrop">
                         <option value="0">No</option>
                         <option value="1">Yes</option>
                     </select>
@@ -213,7 +214,7 @@
 
             <span class="preview">
                 {% if (file.thumbsUrl) { %}
-                     <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}">
+                     <a href="{%=file.imagesUrl%}" title="{%=file.name%}" download="{%=file.name%}">
 
                     <img src="{%=file.thumbsUrl%}?{%=Date()%}">
                     </a>

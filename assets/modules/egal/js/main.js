@@ -11,116 +11,14 @@
 
 /* global $, window */
 
+// Initialize the jQuery File Upload widget:
+
 $(function () {
     'use strict';
-    $(".regenerate").click(function (e) {
-        e.preventDefault(e);
-        var data=$fileupload.serializeArray();//+"&regenerate"//.push('regenerate');
-        data[data.length] = { name: "regenerate", value: "1" };
-        $fileupload.addClass('fileupload-processing');
-        $.ajax({
-            url: $fileupload.fileupload('option', 'url'),
-            dataType: 'json',
-            data: data,
-            context: $fileupload[0]
-        }).always(function (result) {
-            $('.template-download').remove();
-        }).done(function (result) {
-            $(this).removeClass('fileupload-processing');
-            $(this).fileupload('option', 'done').call(this, $.Event('done'), {result: result});
-            //$("#sortable1").slideDown(300);
-            //sortIt();
 
-//            $('.files').magnificPopup({
-//                gallery: {enabled: true},
-//                image: {titleSrc: 'title'},
-//                delegate: 'a', // child items selector, by clicking on it popup will open
-//                type: 'image'});
-        });
-
-    });
-
-    $("#sortable1").on("click", ".preview", function () {
-        $(this).siblings('.toggle').click();
-    });
     var $fileupload = $('#fileupload');
     var $settings = $('#settings');
-    $("#pId").val(localStorage.getItem('id1'))
-        .on("change", function () {
-            localStorage.setItem('id1', this.value);
-            loadImg();
-        });
 
-//    $("html").dblclick( function(){
-//        $(".fileinput-button input").click()
-//    });
-
-    $("input#size").on("input", function () {
-//        alert (this.value);
-        $("ol li").css("width", this.value + "%")
-    });
-    $("button#list").on("click", function () {
-        $("ol li").toggleClass("list")
-
-    });
-
-
-    function loadImg() {
-        $fileupload.addClass('fileupload-processing');
-        //$("#sortable1").hide();
-        $.ajax({
-            url: $fileupload.fileupload('option', 'url'),
-            dataType: 'json',
-            data: $fileupload.serializeArray(),
-            context: $fileupload[0]
-        }).always(function (result) {
-            $(this).removeClass('fileupload-processing');
-            $('.template-download').remove();
-        }).done(function (result) {
-            $(this).fileupload('option', 'done').call(this, $.Event('done'), {result: result});
-            //$("#sortable1").slideDown(300);
-            //sortIt();
-
-            $('.files').magnificPopup({
-                midClick: true,
-                gallery: {enabled: true},
-                image: {titleSrc: 'title'},
-                delegate: 'a', // child items selector, by clicking on it popup will open
-                type: 'image'});
-        });
-    }
-
-    //************* select doc from tree and show images
-    function select() {
-
-        top.tree.ca = 'move';
-        top.main.setMoveValue = function selectId(pId, pName) {
-            $fileupload.addClass('fileupload-processing');
-            $("h1").html(pName);
-            $("#pId").val(pId);
-
-var data=$fileupload.serializeArray();
-data[data.length] = { name: "select", value: "1" };
-            $.post('server/php/save.php', data, function (data) {
-               
-               //console.log($.parseJSON(data));
-               //console.log((data));
-                $.each($.parseJSON(data), function (i, val) {
-                    $("#settings [name=" + i + "]").val(val);
-                });
-
-                localStorage.setItem('id1', pId);
-
-                loadImg();
-            });
-
-            localStorage.setItem('id1', pId);
-            //loadImg();
-        }
-    }
-
-
-    // Initialize the jQuery File Upload widget:
     $fileupload.fileupload({
         //disableImageResize: false,
         autoUpload: true,
@@ -136,26 +34,32 @@ data[data.length] = { name: "select", value: "1" };
         stopped: function () {
             sortIt();
         }
-    });//.on('fileuploadsubmit', function (e, data) {    });
+
+    });
+
+    localStorage.getItem('id1') ? $("#pId").val(localStorage.getItem('id1')) : $("#pId").val(1);
+    loadSettings();
+
+    $settings.on("change", '#pId', function () {localStorage.setItem('id1',this.value);loadSettings();loadImg();});
+    $("input#size").on("input", function () {$("ol li").css("width", this.value + "%")});
+    $("button#list").on("click", function () {$("ol li").toggleClass("list")});
 
 
     select();
     loadImg();
     sort();
 
-
-//************* update settings
-    $settings.on('change', 'input, select', (function () {
+    //************* update settings
+    $settings.on('change', '.settings', (function () {
         $fileupload.addClass('fileupload-processing');
-        var data=$fileupload.serializeArray();
+        var data = $fileupload.serializeArray();
         data[data.length] = { name: "update", value: "1" };
         $.post('server/php/save.php', data, function (data) {
             $fileupload.removeClass('fileupload-processing');
-            //loadImg()
         })
     }));
 
-//************* update details
+    //************* update details
     $fileupload.on('change', 'form.details input, form.details textarea', (function () {
         $fileupload.addClass('fileupload-processing');
         $.post('server/php/save.php', $(this).parent().serialize(), function (data) {
@@ -163,31 +67,79 @@ data[data.length] = { name: "select", value: "1" };
         })
     }));
 
+    //************* select doc from tree and show images
+    function select() {
+
+        top.tree.ca = 'move';
+        top.main.setMoveValue = function selectId(pId, pName) {
+            $fileupload.addClass('fileupload-processing');
+            $("h1").html(pName);
+            $("#pId").val(pId).change();
+        }
+    }
+
+    function loadSettings() {
+        var data = $fileupload.serializeArray();
+        data[data.length] = { name: "select", value: "1" };
+        $.post('server/php/save.php', data, function (data) {
+            $.each($.parseJSON(data), function (i, val) {
+                $("#settings [name=" + i + "]").val(val);
+            });
+        })
+    }
+
+    function loadImg() {
+        $fileupload.addClass('fileupload-processing');
+        $.ajax({
+            url: $fileupload.fileupload('option', 'url'),
+            dataType: 'json',
+            data: $fileupload.serializeArray(),
+            context: $fileupload[0]
+        }).always(function (result) {
+            $(this).removeClass('fileupload-processing');
+            $('.template-download').remove();
+        }).done(function (result) {
+            $(this).fileupload('option', 'done').call(this, $.Event('done'), {result: result});
+
+            $('.files').magnificPopup({
+                midClick: true,
+                gallery: {enabled: true},
+                image: {titleSrc: 'title'},
+                delegate: 'a', // child items selector, by clicking on it popup will open
+                type: 'image'});
+        });
+    }
+
+
+    $(".regenerate").click(function (e) {
+        $fileupload.addClass('fileupload-processing');
+        e.preventDefault(e);
+        var data=$fileupload.serializeArray();
+        data[data.length] = { name: "regenerate", value: "1" };
+        $.ajax({
+            url: $fileupload.fileupload('option', 'url'),
+            dataType: 'json',
+            data: data,
+            context: $fileupload[0]
+        }).always(function (result) {
+            $('.template-download').remove();
+            $("#err").html(result.responseText);
+        }).done(function (result) {
+            $("#err").html(result.responseText);
+            $(this).removeClass('fileupload-processing');
+            $(this).fileupload('option', 'done').call(this, $.Event('done'), {result: result});
+        });
+
+    });
 
     function sort() {
-        $fileupload.addClass('fileupload-processing');
-
         var sortable1 = document.getElementById("sortable1");
         new Sortable(sortable1, {
             handle: "span",
-            onUpdate: function () {
-                sortIt();
-            },
-//            onAdd: function () {
-//                sortIt();
-//            },
-//            onRemove: function () {
-//                sortIt();
-//            },
+            onUpdate: function () { sortIt(); },
             ghostClass: "sortable-ghost"
-//            group: "sortable1"
-            //draggable: ".template-download",
         });
-
-        //sortIt();
-
     }
-
 
     function sortIt() {
         $fileupload.addClass('fileupload-processing');
@@ -208,17 +160,6 @@ data[data.length] = { name: "select", value: "1" };
         })
 
     }
-
-
-    // Enable iframe cross-domain access via redirect option:
-    $('#fileupload').fileupload(
-        'option',
-        'redirect',
-        window.location.href.replace(
-            /\/[^\/]*$/,
-            '/cors/result.html?%s'
-        )
-    );
 
 
 });
