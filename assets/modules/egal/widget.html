@@ -214,7 +214,7 @@
 
             <span class="preview">
                 {% if (file.thumbsUrl) { %}
-                     <a href="{%=file.imagesUrl%}" title="{%=file.name%}" download="{%=file.name%}">
+                     <a href="{%=file.imagesUrl%}?{%=Date()%}" title="{%=file.name%}" download="{%=file.name%}">
 
                     <img src="{%=file.thumbsUrl%}?{%=Date()%}">
                     </a>

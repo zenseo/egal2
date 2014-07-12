@@ -23,6 +23,7 @@ $modx->db->connect();
 //if (isset($_REQUEST['tquality']))  $_SESSION['tQ']=$_REQUEST['tquality'];
 
 $options = array(
+    'image_library' => 1,
     //'gallery_dir' => isset($_REQUEST['pId'])?($_REQUEST['pId']):"1",
     'delete_type' => 'POST',
     //'download_via_php' => true,

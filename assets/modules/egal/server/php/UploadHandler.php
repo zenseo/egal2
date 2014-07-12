@@ -696,15 +696,15 @@ class UploadHandler
             $max_width / $img_width,
             $max_height / $img_height
         );
-        if ($scale >= 1) {
-            if ($image_oriented) {
-                return $write_func($src_img, $new_file_path, $image_quality);
-            }
-            if ($file_path !== $new_file_path) {
-                return copy($file_path, $new_file_path);
-            }
-            return true;
-        }
+//        if ($scale >= 1) {
+//            if ($image_oriented) {
+//                return $write_func($src_img, $new_file_path, $image_quality);
+//            }
+//            if ($file_path !== $new_file_path) {
+//                return copy($file_path, $new_file_path);
+//            }
+//            return true;
+//        }
         if (empty($options['crop'])) {
             $new_width = $img_width * $scale;
             $new_height = $img_height * $scale;
