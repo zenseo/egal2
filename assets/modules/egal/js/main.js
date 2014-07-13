@@ -15,6 +15,7 @@
 
 $(function () {
     'use strict';
+    //localStorage.setItem('id1',(content_id));
 
     var $fileupload = $('#fileupload');
     var $settings = $('#settings');

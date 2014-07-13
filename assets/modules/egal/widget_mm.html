@@ -20,135 +20,113 @@
     <![endif]-->
     <meta charset="utf-8">
     <title>jQuery File Upload Demo</title>
-    <meta name="description" content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
+    <meta name="description"
+          content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap styles -->
     <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
     <!-- Generic page styles -->
-    <!--<link rel="stylesheet" href="css/style.css">-->
+    <link rel="stylesheet" href="css/style.css">
     <!-- blueimp Gallery styles -->
     <!--<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">-->
     <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
     <!--<link rel="stylesheet" href="css/jquery.fileupload.css">-->
     <!--<link rel="stylesheet" href="css/jquery.fileupload-ui.css">-->
+
+    <link rel="stylesheet" href="magnific-popup/magnific-popup.css">
     <link rel="stylesheet" href="css/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
     <link rel="stylesheet" href="css/pe-icon-7-stroke/css/helper.css">
+
+
     <!-- CSS adjustments for browsers with JavaScript disabled -->
-    <noscript><link rel="stylesheet" href="css/jquery.fileupload-noscript.css"></noscript>
-    <noscript><link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css"></noscript>
-    <link rel="stylesheet" href="css/scss.css">
+    <noscript>
+        <link rel="stylesheet" href="css/jquery.fileupload-noscript.css">
+    </noscript>
+    <noscript>
+        <link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css">
+    </noscript>
+    <!--<link rel="stylesheet" href="css/scss.css">-->
 </head>
-<body style="height: 100%">
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-fixed-top .navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="https://github.com/blueimp/jQuery-File-Upload">jQuery File Upload</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="https://github.com/blueimp/jQuery-File-Upload/tags">Download1</a></li>
-                <li><a href="https://github.com/blueimp/jQuery-File-Upload">Source Code</a></li>
-                <li><a href="https://github.com/blueimp/jQuery-File-Upload/wiki">Documentation</a></li>
-                <li><a href="https://blueimp.net">&copy; Sebastian Tschan</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
+<body>
+
 <div class="container">
+    <div id="err"></div>
+    <!--<select id="size">-->
+    <!--<option value="10">10</option>-->
+    <!--<option value="20">20</option>-->
+    <!--<option value="25">25</option>-->
+    <!--<option value="50">50</option>-->
+    <!--<option value="100">100</option>-->
+    <!--</select>-->
+    <input id="size" type="range">
+    <!--<button id="list">list</button>-->
     <h1>eGal</h1>
     <!--<h2 class="lead">Basic Plus UI version</h2>-->
-    <form id="settings" class="details form-inline1">
-        <label><input class="form-control input-sm hidden1" id="pId" name="content_id" type="number" value="2"></label>
-
-        Images
-        <label>Width <input class="form-control input-sm" name="iwidth" type="number" value="1920"></label>
-        <label>Height <input class="form-control input-sm" name="iheight" type="number" value="1200"></label>
-        <label>Quality <input class="form-control input-sm" name="iquality" type="number" value="95"></label>
-
-        Thumbs
-        <label>Width <input class="form-control input-sm" name="twidth" type="number" value="200"></label>
-        <label>Height <input class="form-control input-sm" name="theight" type="number" value="120"></label>
-        <label>Quality <input class="form-control input-sm" name="tquality" type="number" value="95"></label>
-    </form>
     <br>
+
     <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
+    <form id="fileupload" action="server/php/index.php" method="POST" enctype="multipart/form-data">
         <!-- Redirect browsers with JavaScript disabled to the origin page -->
         <!--<noscript><input type="hidden" name="redirect" value="http://blueimp.github.io/jQuery-File-Upload/"></noscript>-->
 
-<!--        <nav>
-            <ul class="nav">
-                <li>
-                    <a href="">
-                        <i class="pe-7s-browser pe-2x"></i>
-                        <span class="screen-reader-text">Add files...</span>
+        <div id="settings" class="details">
+            <div>Document ID
+                <label><input class="form-control input-sm hidden1" id="pId" name="content_id" type="number" value="(content_id)"></label>
+            </div>
 
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <span class="icon-cog"></span>
-                        <span class="screen-reader-text">Settings</span>
-                    </a></li>
-                <li>
-                    <a href="">
-                        <span class="icon-cw"></span>
-                        <span class="screen-reader-text">Refresh</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="">
-                        <span class="icon-location"></span>
-                        <span class="screen-reader-text">Location</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>​-->
+
+            <div> Images
+                <label>Width <input class="settings input-sm" name="iwidth" type="number" value="1920"></label>
+                <label>Height <input class="settings input-sm" name="iheight" type="number" value="1200"></label>
+                <label>Quality <input class="settings input-sm" name="iquality" type="number" value="95"></label>
+                <label>Crop
+                    <select class="settings" name="icrop">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </label>
+            </div>
+
+
+            <div> Thumbs
+                <label>Width <input class="settings input-sm" name="twidth" type="number" value="192"></label>
+                <label>Height <input class="settings input-sm" name="theight" type="number" value="120"></label>
+                <label>Quality <input class="settings input-sm" name="tquality" type="number" value="95"></label>
+                <label>Crop
+                    <select class="settings" name="tcrop">
+                        <option value="0">No</option>
+                        <option value="1">Yes</option>
+                    </select>
+                </label>
+            </div>
+            <br>
+
+        </div>
+
 
         <div class="row fileupload-buttonbar">
-            <nav>
-                <ul class="nav">
-                    <li>
-                        <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="circle fileinput-button">
-                    <i class="pe-7s-browser pe-2x"></i>
-                    <span class="screen-reader-text">Add files.....</span>
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+
+                <button type="submit" class="btn btn-primary regenerate">
+                    <span>regenerate</span>
+                </button>
+
+                <button class="btn btn-success fileinput-button">
+                    <span>Add files...</span>
                     <input type="file" name="files[]" multiple>
-                </span>
-                    </li>
-                    <li>
-                <span class="circle btn btn-primary start">
-                    <i class="pe-7s-upload pe-2x"></i>
-                    <span class="screen-reader-text">Start upload</span>
-                </span>
-                    </li>
-                    <li>
-                <span class="circle cancel">
-                    <i class="pe-7s-close-circle pe-spin pe-2x"></i>
-                    <span class="screen-reader-text">Cancel upload</span>
-                </span>
-                    </li>
-                    <li>
-                <span class="circle delete">
-                    <i class="pe-7s-trash pe-2x"></i>
-                    <span class="screen-reader-text">Delete</span>
-                </span>
-                    </li>
-                    <li>
-                        <span class="circle">
-                            <i class="pe-7s-switch pe-2x"></i>
-                        <input type="checkbox" class="toggle">
-                        <!-- The global file processing state -->
-                        <!--<span class="fileupload-process"></span>-->
-                        </span>
-                    </li>
-                </ul>
-            </nav>
+                </button>
+                <button type="submit" class="btn btn-primary start">
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle">
+            </div>
             <!-- The global progress state -->
             <div class="col-lg-5 fileupload-progress fade">
                 <!-- The global progress bar -->
@@ -159,36 +137,41 @@
                 <div class="progress-extended">&nbsp;</div>
             </div>
         </div>
+
         <!-- The table listing the files available for upload/download -->
-        <div role="presentation" class="table table-striped"><ol id="sortable1" class="files"></ol></div>
+        <div role="presentation" class="table table-striped">
+            <ol id="sortable1" class="files"></ol>
+        </div>
     </form>
-    <br>
-    <!--<div class="panel panel-default">-->
-        <!--<div class="panel-heading">-->
-            <!--<h3 class="panel-title">Demo Notes</h3>-->
-        <!--</div>-->
-        <!--<div class="panel-body">-->
-            <!--<ul>-->
-                <!--<li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is unlimited).</li>-->
-                <!--<li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no file type restriction).</li>-->
-                <!--<li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>-->
-                <!--<li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).</li>-->
-                <!--<li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.</li>-->
-                <!--<li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and Icons from <a href="http://glyphicons.com/">Glyphicons</a>.</li>-->
-            <!--</ul>-->
-        <!--</div>-->
-    <!--</div>-->
+
+    <!--     <div class="panel">
+            <div class="panel-heading">
+                <h3 class="panel-title">Demo Notes</h3>
+            </div>
+            <div class="panel-body">
+                <ul>
+                    <li>The maximum file size for uploads in this demo is <strong>5 MB</strong> (default file size is
+                        unlimited).
+                    </li>
+                    <li>Only image files (<strong>JPG, GIF, PNG</strong>) are allowed in this demo (by default there is no
+                        file type restriction).
+                    </li>
+                    <li>Uploaded files will be deleted automatically after <strong>5 minutes</strong> (demo setting).</li>
+                    <li>You can <strong>drag &amp; drop</strong> files from your desktop on this webpage (see <a
+                            href="https://github.com/blueimp/jQuery-File-Upload/wiki/Browser-support">Browser support</a>).
+                    </li>
+                    <li>Please refer to the <a href="https://github.com/blueimp/jQuery-File-Upload">project website</a> and
+                        <a href="https://github.com/blueimp/jQuery-File-Upload/wiki">documentation</a> for more information.
+                    </li>
+                    <li>Built with Twitter's <a href="http://twitter.github.com/bootstrap/">Bootstrap</a> CSS framework and
+                        Icons from <a href="http://glyphicons.com/">Glyphicons</a>.
+                    </li>
+                </ul>
+            </div>
+        </div> -->
+
 </div>
-<!-- The blueimp Gallery widget -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
-</div>
+
 <!-- The template to display files available for upload -->
 <script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
@@ -222,23 +205,27 @@
 
     </li>
 {% } %}
+
 </script>
 <!-- The template to display files available for download -->
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
-    <li class="template-download fade">
+    <li class="template-download ">
 
             <span class="preview">
                 {% if (file.thumbsUrl) { %}
-                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbsUrl%}"></a>
+                     <a href="{%=file.imagesUrl%}?{%=Date()%}" title="{%=file.name%}" download="{%=file.name%}">
+
+                    <img src="{%=file.thumbsUrl%}?{%=Date()%}">
+                    </a>
                 {% } %}
             </span>
 
             <form class="details collapse1  no-transition">
-                <span class="size">{%=o.formatFileSize(file.size)%}</span>
-                <input name="sortorder" class="form-control hide1" type="text" value="{%=file.sortorder%}" >
+                <span class="size collapse">{%=o.formatFileSize(file.size1)%}</span>
 
-                <input name="filename" class="form-control " type="text" value="{%=file.name%}" readonly>
+
+                <input name="filename" class="form-control collapse" type="text" value="{%=file.name%}" readonly>
                 {% if (file.error) { %}
                 <div><span class="label label-danger">Error</span> {%=file.error%}</div>
                 {% } %}
@@ -247,7 +234,8 @@
                 <input name="title" class="form-control" type="text" value="{%=file.title%}" placeholder="Title">
                 <textarea name="description" class="form-control" placeholder="Description">{%=file.description%}</textarea>
                 <input name="keywords" class="form-control" type="text" value="{%=file.keywords%}" placeholder="Keywords">
-                <input name="id" class="form-control collapse1" type="text" value="{%=file.id%}" readonly>
+                <input name="sortorder" class="" type="text" value="{%=file.sortorder%}" >
+                <input name="id" class="" type="text" value="{%=file.id%}" readonly>
             </form>
 
 
@@ -260,16 +248,20 @@
                     <i class="glyphicon glyphicon-trash"></i>
                     <span>Delete</span>
                 </button>
-                <input type="checkbox" name="delete" value="1" class="toggle">
+<!--                <button class="btn btn-danger regenerate" data-type="{%=file.deleteType%}" data-url="{%=file.regenerateUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>regenerate</span>
+                </button>-->
+<input type="checkbox" name="delete" value="1" class="toggle">
             {% } else { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
                     <span>Cancel</span>
                 </button>
             {% } %}
-
     </li>
 {% } %}
+
 </script>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -283,8 +275,7 @@
 <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
 <!--<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>-->
-<!-- blueimp Gallery script -->
-<!--<script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>-->
+
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
 <script src="js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
@@ -302,7 +293,11 @@
 <!-- The File Upload user interface plugin -->
 <script src="js/jquery.fileupload-ui.js"></script>
 <!--<script src="js/jquery-ui-1.10.3.custom.min.js"></script>-->
-<script src="js/Sortable.js"></script>
+
+<script src="js/Sortable.min.js"></script>
+
+<script src="magnific-popup/jquery.magnific-popup.min.js"></script>
+
 <!-- The main application script -->
 <script src="js/main.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
@@ -310,6 +305,5 @@
 <script src="js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
 
-<!--<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>-->
 </body>
 </html>
