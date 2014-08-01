@@ -21,5 +21,5 @@ $sql = "CREATE TABLE IF NOT EXISTS " . $modx->getFullTableName("portfolio_settin
 $modx->db->query($sql);
 //test
 if (isset ($_REQUEST['content_id']))
-    echo str_replace('(content_id)', $_REQUEST['content_id'],file_get_contents(dirname(__FILE__) . '/widget_mm.html'));
+    echo str_replace('[(content_id)]', $_REQUEST['content_id'], file_get_contents(dirname(__FILE__) . '/widget_mm.html'));
 else echo file_get_contents(dirname(__FILE__) . '/widget.html');

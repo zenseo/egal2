@@ -23,20 +23,12 @@
     <meta name="description"
           content="File Upload widget with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery. Supports cross-domain, chunked and resumable file uploads and client-side image resizing. Works with any server-side platform (PHP, Python, Ruby on Rails, Java, Node.js, Go etc.) that supports standard HTML form file uploads.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Bootstrap styles -->
-    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">-->
-    <!-- Generic page styles -->
+
     <link rel="stylesheet" href="css/style.css">
-    <!-- blueimp Gallery styles -->
-    <!--<link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">-->
-    <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-    <!--<link rel="stylesheet" href="css/jquery.fileupload.css">-->
-    <!--<link rel="stylesheet" href="css/jquery.fileupload-ui.css">-->
 
     <link rel="stylesheet" href="magnific-popup/magnific-popup.css">
-    <link rel="stylesheet" href="css/pe-icon-7-stroke/css/pe-icon-7-stroke.css">
-    <link rel="stylesheet" href="css/pe-icon-7-stroke/css/helper.css">
-
+    <!--<link rel="stylesheet" href="css/pe-icon-7-stroke/css/pe-icon-7-stroke.css">-->
+    <!--<link rel="stylesheet" href="css/pe-icon-7-stroke/css/helper.css">-->
 
     <!-- CSS adjustments for browsers with JavaScript disabled -->
     <noscript>
@@ -45,8 +37,8 @@
     <noscript>
         <link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css">
     </noscript>
-    <!--<link rel="stylesheet" href="css/scss.css">-->
 </head>
+
 <body>
 
 <div class="container">
@@ -58,7 +50,7 @@
     <!--<option value="50">50</option>-->
     <!--<option value="100">100</option>-->
     <!--</select>-->
-    <input id="size" type="range">
+    <input id="size" type="range" min="10">
     <!--<button id="list">list</button>-->
     <h1>eGal</h1>
     <!--<h2 class="lead">Basic Plus UI version</h2>-->
@@ -71,7 +63,7 @@
 
         <div id="settings" class="details">
             <div>Document ID
-                <label><input class="form-control input-sm hidden1" id="pId" name="content_id" type="number" value="(content_id)"></label>
+                <label><input class="form-control input-sm hidden1" id="pId" name="content_id" type="number" value="[(content_id)]"></label>
             </div>
 
 
@@ -299,7 +291,7 @@
 <script src="magnific-popup/jquery.magnific-popup.min.js"></script>
 
 <!-- The main application script -->
-<script src="js/main.js"></script>
+<script src="js/main_mm.js"></script>
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="js/cors/jquery.xdr-transport.js"></script>

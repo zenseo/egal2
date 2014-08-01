@@ -13,7 +13,7 @@ $modx->db->connect();
 //$cols = $modx->db->getRow( $result );
 //echo $modx->getLoginUserID();
 
-@session_start();
+//@session_start();
 //if (isset($_REQUEST['iwidth']))  $_SESSION['iW']=$_REQUEST['iwidth'];
 //if (isset($_REQUEST['iheight']))  $_SESSION['iH']=$_REQUEST['iheight'];
 //if (isset($_REQUEST['iquality']))  $_SESSION['iQ']=$_REQUEST['iquality'];

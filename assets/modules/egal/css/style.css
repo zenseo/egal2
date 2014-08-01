@@ -55,7 +55,7 @@ button {
   border-radius: 5px;
 }
  button {
-  
+
 }
 .fileupload-buttonbar button:hover {
 background: rgba(0, 150, 255, 1);
@@ -71,7 +71,7 @@ ol input, textarea {
 }
 ol button {
   width: 60px;
-  
+
   position: absolute;
   bottom: 0;
   right: 0;
