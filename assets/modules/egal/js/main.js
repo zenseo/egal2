@@ -63,7 +63,7 @@ $(function () {
     //************* update details
     $fileupload.on('change', 'form.details input, form.details textarea', (function () {
         $fileupload.addClass('fileupload-processing');
-        $.post('server/php/save.php', $(this).parent().serialize(), function (data) {
+        $.post('server/php/save.php', $(this).parents('form').serialize(), function (data) {
             $fileupload.removeClass('fileupload-processing');
         })
     }));
@@ -107,8 +107,19 @@ $(function () {
                 gallery: {enabled: true},
                 image: {titleSrc: 'title'},
                 delegate: 'a', // child items selector, by clicking on it popup will open
-                type: 'image'});
+                type: 'image'
+                });
+
+        $('textarea').redactor({
+            air: true,
+            blurCallback: function(e)
+            {
+                this.$source.html(this.get()).change();
+            }
         });
+        
+        });
+
     }
 
 
